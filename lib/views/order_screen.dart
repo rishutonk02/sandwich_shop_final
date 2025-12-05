@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
-import 'package:sandwich_shop_final/models/sandwich.dart';
-import 'package:sandwich_shop_final/models/cart.dart';
-import 'package:sandwich_shop_final/view_models/order_view_model.dart';
-import 'package:sandwich_shop_final/services/file_service.dart';
-import 'package:sandwich_shop_final/views/cart_screen.dart';
-import 'package:sandwich_shop_final/views/app_drawer.dart';
-import 'package:sandwich_shop_final/views/profile_screen.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/view_models/order_view_model.dart';
+import 'package:sandwich_shop/services/file_service.dart';
+import 'package:sandwich_shop/views/cart_screen.dart';
+import 'package:sandwich_shop/views/app_drawer.dart';
+import 'package:sandwich_shop/views/profile_screen.dart';
 
 class OrderScreen extends StatefulWidget {
   final int maxQuantity;
@@ -24,17 +24,6 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  // List of all sandwich image paths
-  final List<String> _sandwichImages = [
-    'images/veggieDelight_footlong.png',
-    'images/veggieDelight_six_inch.png',
-    'images/chickenTeriyaki_footlong.png',
-    'images/chickenTeriyaki_six_inch.png',
-    'images/meatballMarinara_footlong.png',
-    'images/meatballMarinara_six_inch.png',
-    'images/tunaMelt_footlong.png',
-    'images/tunaMelt_six_inch.png',
-  ];
   final Cart _cart = Cart();
   late final OrderViewModel _vm;
   final TextEditingController _notesController = TextEditingController();
@@ -257,12 +246,14 @@ class _OrderScreenState extends State<OrderScreen> {
                   const Text('Quantity: ', style: AppStyles.normalText),
                   IconButton(
                     onPressed: _getDecreaseCallback(),
-                    icon: const Icon(Icons.remove),
+                    icon: const Icon(Icons.remove, color: Colors.black),
+                    tooltip: 'Decrease quantity',
                   ),
                   Text('$_quantity', style: AppStyles.heading2),
                   IconButton(
                     onPressed: _increaseQuantity,
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add, color: Colors.black),
+                    tooltip: 'Increase quantity',
                   ),
                 ],
               ),

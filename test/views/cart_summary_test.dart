@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop_final/main.dart';
+import 'package:sandwich_shop/main.dart';
 
 void main() {
   testWidgets('Adds item to cart updates summary and shows confirmation', (

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop_final/models/cart.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
+import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
 
 class CartSummary extends StatelessWidget {
   final Cart cart;

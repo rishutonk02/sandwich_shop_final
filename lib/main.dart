@@ -15,26 +15,21 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const OrderScreen(maxQuantity: 5),
-      routes: [
-        GoRoute(path: 'cart', builder: (context, state) => const CartScreen()),
-        GoRoute(
-          path: 'profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
-        GoRoute(
-          path: 'about',
-          builder: (context, state) => const AboutScreen(),
-        ),
-        GoRoute(
-          path: 'checkout',
-          builder: (context, state) =>
-              CheckoutScreen(cart: state.extra as Cart? ?? Cart()),
-        ),
-        GoRoute(
-          path: 'settings',
-          builder: (context, state) => const SettingsScreen(),
-        ),
-      ],
+    ),
+    GoRoute(path: '/cart', builder: (context, state) => const CartScreen()),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(path: '/about', builder: (context, state) => const AboutScreen()),
+    GoRoute(
+      path: '/checkout',
+      builder: (context, state) =>
+          CheckoutScreen(cart: state.extra as Cart? ?? Cart()),
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );

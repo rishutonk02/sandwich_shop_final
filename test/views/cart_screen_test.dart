@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop_final/views/cart_screen_page.dart';
-import 'package:sandwich_shop_final/services/file_service.dart';
+import 'package:sandwich_shop/views/cart_screen_page.dart';
+import 'package:sandwich_shop/services/file_service.dart';
 
 class FakeFileService extends FileService {
   @override

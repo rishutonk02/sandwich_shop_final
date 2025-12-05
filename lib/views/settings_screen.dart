@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sandwich_shop_final/views/app_drawer.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
+import 'package:sandwich_shop/views/app_drawer.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

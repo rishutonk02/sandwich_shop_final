@@ -1,6 +1,6 @@
 {
-    "name": "sandwich_shop_final",
-    "short_name": "sandwich_shop_final",
+    "name": "sandwich_shop",
+    "short_name": "sandwich_shop",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

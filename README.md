@@ -1,5 +1,5 @@
 
-# Sandwich Shop (sandwich_shop_final)
+# Sandwich Shop (sandwich_shop)
 
 Simple Flutter app demonstrating a sandwich-ordering UI (Mr Tree Sandwiches).
 

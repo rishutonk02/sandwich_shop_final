@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
-import 'package:sandwich_shop_final/views/app_drawer.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/views/app_drawer.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});

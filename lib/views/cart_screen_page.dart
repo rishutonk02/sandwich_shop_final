@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
-import 'package:sandwich_shop_final/services/file_service.dart';
-import 'package:sandwich_shop_final/models/cart.dart';
-import 'package:sandwich_shop_final/views/checkout_screen.dart';
-import 'package:sandwich_shop_final/views/app_drawer.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
+import 'package:sandwich_shop/services/file_service.dart';
+import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/views/checkout_screen.dart';
+import 'package:sandwich_shop/views/app_drawer.dart';
 
 class CartScreen extends StatefulWidget {
   final FileService? fileService;
@@ -101,8 +102,47 @@ class _CartScreenState extends State<CartScreen> {
                           subtitle: Text(
                             '${it.sandwich.breadType.name} • ${it.sandwich.isFootlong ? 'Footlong' : 'Six-inch'}',
                           ),
-                          trailing: Text(
-                            '£${_cart.totalPrice.toStringAsFixed(2)}',
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.remove_circle_outline,
+                                  color: it.quantity > 0
+                                      ? Colors.black
+                                      : Colors.grey,
+                                ),
+                                onPressed: it.quantity > 0
+                                    ? () {
+                                        setState(() {
+                                          _cart.decrease(
+                                            it.sandwich,
+                                            quantity: 1,
+                                          );
+                                        });
+                                      }
+                                    : null,
+                              ),
+                              Text(
+                                '${it.quantity}',
+                                style: AppStyles.normalText,
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.add_circle_outline,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _cart.add(it.sandwich, quantity: 1);
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '£${PricingRepository().calculateTotal(quantity: it.quantity, isFootlong: it.sandwich.isFootlong).toStringAsFixed(2)}',
+                              ),
+                            ],
                           ),
                         );
                       },

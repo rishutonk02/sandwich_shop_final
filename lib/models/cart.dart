@@ -1,5 +1,5 @@
-import 'package:sandwich_shop_final/models/sandwich.dart';
-import 'package:sandwich_shop_final/repositories/pricing_repository.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 class CartItem {
   final Sandwich sandwich;
@@ -26,6 +26,26 @@ class Cart {
     } else {
       existing.quantity += quantity;
     }
+  }
+
+  /// Decrease quantity of [sandwich] by [quantity]. If quantity becomes
+  /// zero or less the item is removed. Returns true if an item was updated
+  /// or removed, false if the sandwich was not found.
+  bool decrease(Sandwich sandwich, {int quantity = 1}) {
+    final index = _items.indexWhere(
+      (it) =>
+          it.sandwich.type == sandwich.type &&
+          it.sandwich.isFootlong == sandwich.isFootlong &&
+          it.sandwich.breadType == sandwich.breadType,
+    );
+    if (index == -1) return false;
+    final it = _items[index];
+    if (quantity >= it.quantity) {
+      _items.removeAt(index);
+    } else {
+      it.quantity -= quantity;
+    }
+    return true;
   }
 
   int get totalItems {
