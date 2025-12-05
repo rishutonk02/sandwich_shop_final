@@ -21,3 +21,9 @@ class AppStyles {
     fontWeight: FontWeight.bold,
   );
 }
+
+// Backwards-compatible top-level aliases for older code that used
+// `heading1`, `heading2`, and `normalText` as globals.
+const TextStyle heading1 = AppStyles.heading1;
+const TextStyle heading2 = AppStyles.heading2;
+const TextStyle normalText = AppStyles.normalText;
