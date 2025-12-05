@@ -1,14 +1,14 @@
 // ...existing code...
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sandwich_shop_final/views/app_styles.dart';
-import 'package:sandwich_shop_final/views/order_screen.dart';
-import 'package:sandwich_shop_final/views/cart_screen_page.dart';
-import 'package:sandwich_shop_final/views/profile_screen.dart';
-import 'package:sandwich_shop_final/views/about_screen.dart';
-import 'package:sandwich_shop_final/views/checkout_screen.dart';
-import 'package:sandwich_shop_final/views/settings_screen.dart';
-import 'package:sandwich_shop_final/models/cart.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/views/order_screen.dart';
+import 'package:sandwich_shop/views/cart_screen_page.dart';
+import 'package:sandwich_shop/views/profile_screen.dart';
+import 'package:sandwich_shop/views/about_screen.dart';
+import 'package:sandwich_shop/views/checkout_screen.dart';
+import 'package:sandwich_shop/views/settings_screen.dart';
+import 'package:sandwich_shop/models/cart.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -27,9 +27,8 @@ final GoRouter _router = GoRouter(
         ),
         GoRoute(
           path: 'checkout',
-          builder: (context, state) => CheckoutScreen(
-            cart: state.extra as Cart? ?? Cart(),
-          ),
+          builder: (context, state) =>
+              CheckoutScreen(cart: state.extra as Cart? ?? Cart()),
         ),
         GoRoute(
           path: 'settings',
@@ -50,7 +49,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Mr Tree Sandwiches',
+      title: 'Sandwich Shop',
       theme: AppStyles.theme,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
