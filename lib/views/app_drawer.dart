@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// Navigation is handled by go_router; we navigate using route paths.
+import 'package:sandwich_shop/views/cart_screen_page.dart';
+import 'package:sandwich_shop/views/profile_screen.dart';
+import 'package:sandwich_shop/views/settings_screen.dart';
+import 'package:sandwich_shop/views/about_screen.dart';
+// Navigation is handled by go_router when available; fall back to Navigator.push.
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -35,14 +39,18 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
+              // Close the drawer first
               Navigator.pop(context);
               debugPrint('Drawer: navigating to /');
               try {
-                GoRouter.of(context).go('/');
+                // Prefer go_router when available
+                context.go('/');
+                return;
               } catch (e) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+                // No GoRouter available — fall back to Navigator by popping
+                // until the first route (the app's home) so this reliably
+                // returns to the OrderScreen when the drawer is used.
+                Navigator.of(context).popUntil((route) => route.isFirst);
               }
             },
           ),
@@ -55,9 +63,11 @@ class AppDrawer extends StatelessWidget {
               try {
                 GoRouter.of(context).go('/cart');
               } catch (e) {
-                ScaffoldMessenger.of(
+                // fall back to pushing the Cart screen directly
+                Navigator.push(
                   context,
-                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+                  MaterialPageRoute(builder: (_) => const CartScreen()),
+                );
               }
             },
           ),
@@ -70,9 +80,10 @@ class AppDrawer extends StatelessWidget {
               try {
                 GoRouter.of(context).go('/profile');
               } catch (e) {
-                ScaffoldMessenger.of(
+                Navigator.push(
                   context,
-                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
               }
             },
           ),
@@ -85,9 +96,10 @@ class AppDrawer extends StatelessWidget {
               try {
                 GoRouter.of(context).go('/settings');
               } catch (e) {
-                ScaffoldMessenger.of(
+                Navigator.push(
                   context,
-                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
               }
             },
           ),
@@ -96,7 +108,14 @@ class AppDrawer extends StatelessWidget {
             title: const Text('About'),
             onTap: () {
               Navigator.pop(context);
-              context.go('/about');
+              try {
+                context.go('/about');
+              } catch (_) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AboutScreen()),
+                );
+              }
             },
           ),
         ],
