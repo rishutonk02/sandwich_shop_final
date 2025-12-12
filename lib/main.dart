@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_shop/models/cart_model.dart';
+import 'package:sandwich_shop/models/theme_model.dart';
 import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 
@@ -15,12 +16,20 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CartModel>(
-      create: (_) => CartModel(),
-      child: const MaterialApp(
-        title: 'Sandwich Shop App',
-        debugShowCheckedModeBanner: false,
-        home: OrderScreen(maxQuantity: 5),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartModel()),
+        ChangeNotifierProvider(create: (_) => ThemeModel()),
+      ],
+      child: Consumer<ThemeModel>(
+        builder: (context, theme, child) => MaterialApp(
+          title: 'Sandwich Shop App',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: theme.isDark ? ThemeMode.dark : ThemeMode.light,
+          home: const OrderScreen(maxQuantity: 5),
+        ),
       ),
     );
   }
