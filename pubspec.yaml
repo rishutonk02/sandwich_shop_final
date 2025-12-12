@@ -25,17 +25,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - images/app_icon.png
-    - images/chickenTeriyaki_footlong.png
-    - images/chickenTeriyaki_six_inch.png
-    - images/logo.png
-    - images/meatballMarinara_footlong.png
-    - images/meatballMarinara_six_inch.png
-    - images/tunaMelt_footlong.png
-    - images/tunaMelt_six_inch.png
-    - images/veggieDelight_footlong.png
-    - images/veggieDelight_six_inch.png
-    - sandwiches.json
+    - assets/images/app_icon.png
+    - assets/images/chickenTeriyaki_footlong.png
+    - assets/images/chickenTeriyaki_six_inch.png
+    - assets/images/logo.png
+    - assets/images/meatballMarinara_footlong.png
+    - assets/images/meatballMarinara_six_inch.png
+    - assets/images/tunaMelt_footlong.png
+    - assets/images/tunaMelt_six_inch.png
+    - assets/images/veggieDelight_footlong.png
+    - assets/images/veggieDelight_six_inch.png
+    - assets/sandwiches.json
 
 flutter_icons:
   android: true

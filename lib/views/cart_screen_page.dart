@@ -30,19 +30,32 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _load() async {
-    final content = await _fs.read('cart.json');
-    if (content != null) {
-      final decoded = jsonDecode(content) as Map<String, dynamic>;
-      setState(() {
-        _cart = Cart.fromJson(decoded);
-        _loading = false;
-      });
-    } else {
-      setState(() {
-        _cart = Cart();
-        _loading = false;
-      });
+    String? content;
+    try {
+      content = await _fs
+          .read('cart.json')
+          .timeout(const Duration(milliseconds: 500));
+    } catch (e) {
+      content = null;
     }
+
+    if (content != null) {
+      try {
+        final decoded = jsonDecode(content) as Map<String, dynamic>;
+        setState(() {
+          _cart = Cart.fromJson(decoded);
+          _loading = false;
+        });
+        return;
+      } catch (_) {
+        // fallthrough to empty cart
+      }
+    }
+
+    setState(() {
+      _cart = Cart();
+      _loading = false;
+    });
   }
 
   Future<void> _navigateToCheckout() async {

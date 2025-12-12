@@ -18,7 +18,10 @@ class AppDrawer extends StatelessWidget {
               children: [
                 SizedBox(
                   height: 64,
-                  child: Image.asset('images/logo.png', fit: BoxFit.contain),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -33,7 +36,14 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Home'),
             onTap: () {
               Navigator.pop(context);
-              context.go('/');
+              debugPrint('Drawer: navigating to /');
+              try {
+                GoRouter.of(context).go('/');
+              } catch (e) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+              }
             },
           ),
           ListTile(
@@ -41,7 +51,14 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Cart'),
             onTap: () {
               Navigator.pop(context);
-              context.go('/cart');
+              debugPrint('Drawer: navigating to /cart');
+              try {
+                GoRouter.of(context).go('/cart');
+              } catch (e) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+              }
             },
           ),
           ListTile(
@@ -49,14 +66,29 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Profile'),
             onTap: () {
               Navigator.pop(context);
-              context.go('/profile');
+              debugPrint('Drawer: navigating to /profile');
+              try {
+                GoRouter.of(context).go('/profile');
+              } catch (e) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+              }
             },
           ),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              Navigator.pushNamed(context, '/settings');
+              Navigator.pop(context);
+              debugPrint('Drawer: navigating to /settings');
+              try {
+                GoRouter.of(context).go('/settings');
+              } catch (e) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Navigation error: $e')));
+              }
             },
           ),
           ListTile(
