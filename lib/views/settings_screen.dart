@@ -16,14 +16,14 @@ class SettingsScreen extends StatelessWidget {
       theme = null;
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings', style: AppStyles.heading1)),
+      appBar: AppBar(title: Text('Settings', style: AppStyles.heading1)),
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Enable Dark Mode', style: AppStyles.normalText),
+            Text('Enable Dark Mode', style: AppStyles.normalText),
             Switch(
               value: theme?.isDark ?? false,
               onChanged: theme != null

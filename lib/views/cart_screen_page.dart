@@ -44,14 +44,18 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartModel = Provider.of<CartModel>(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Cart', style: AppStyles.heading1)),
+      appBar: AppBar(title: Text('Cart', style: AppStyles.heading1)),
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Items: ${cartModel.totalItems}', style: AppStyles.normalText),
+            Text(
+              'Items: ${cartModel.totalItems}',
+              key: const Key('cart_items'),
+              style: AppStyles.normalText,
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
@@ -99,6 +103,12 @@ class CartScreen extends StatelessWidget {
                   );
                 },
               ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Total: £${cartModel.totalPrice.toStringAsFixed(2)}',
+              key: const Key('cart_total'),
+              style: AppStyles.heading2,
             ),
             const SizedBox(height: 12),
             ElevatedButton.icon(

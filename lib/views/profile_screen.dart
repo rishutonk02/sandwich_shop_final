@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile', style: AppStyles.heading1)),
+      appBar: AppBar(title: Text('Profile', style: AppStyles.heading1)),
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

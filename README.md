@@ -45,4 +45,4 @@ If you want, I can push these changes to the remote branch or open a PR.
 
 ---
 
-Maintainer: Fardeen
+Maintainer: Rishu Tonk

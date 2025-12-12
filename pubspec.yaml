@@ -6,7 +6,6 @@ version: 1.0.0+1
 
 environment:
   sdk: "^3.9.2"
-
 dependencies:
   flutter:
     sdk: flutter
@@ -15,13 +14,16 @@ dependencies:
   go_router: ^17.0.0
   shared_preferences: ^2.5.3
   provider: ^6.0.5
+  sqflite: ^2.3.2
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  image: ^4.0.17
-  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+  image: ^4.0.17
+  sqflite_common_ffi: ^2.3.3
 
 flutter:
   uses-material-design: true

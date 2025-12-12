@@ -44,7 +44,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final children = <Widget>[];
-    children.add(const Text('Order Summary', style: AppStyles.heading2));
+    children.add(Text('Order Summary', style: AppStyles.heading2));
     children.add(const SizedBox(height: 20));
 
     for (final it in widget.cart.items) {
@@ -73,7 +73,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Total:', style: AppStyles.heading2),
+          Text('Total:', style: AppStyles.heading2),
           Text(
             '£${widget.cart.totalPrice.toStringAsFixed(2)}',
             style: AppStyles.heading2,
@@ -84,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     children.add(const SizedBox(height: 40));
 
     children.add(
-      const Text(
+      Text(
         'Payment Method: Card ending in 1234',
         style: AppStyles.normalText,
         textAlign: TextAlign.center,
@@ -96,7 +96,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       children.add(const Center(child: CircularProgressIndicator()));
       children.add(const SizedBox(height: 20));
       children.add(
-        const Text(
+        Text(
           'Processing payment...',
           style: AppStyles.normalText,
           textAlign: TextAlign.center,
@@ -106,13 +106,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       children.add(
         ElevatedButton(
           onPressed: _processPayment,
-          child: const Text('Confirm Payment', style: AppStyles.normalText),
+          child: Text('Confirm Payment', style: AppStyles.normalText),
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout', style: AppStyles.heading1)),
+      appBar: AppBar(title: Text('Checkout', style: AppStyles.heading1)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(children: children),
