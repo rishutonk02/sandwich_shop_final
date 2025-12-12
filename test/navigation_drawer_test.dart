@@ -1,11 +1,23 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart'
+    show
+        Finder,
+        WidgetTester,
+        expect,
+        find,
+        findsOneWidget,
+        findsWidgets,
+        testWidgets;
+import 'package:provider/provider.dart';
 import 'package:sandwich_shop/main.dart';
+import 'package:sandwich_shop/models/cart_model.dart';
 
 void main() {
   testWidgets('Drawer navigation opens Cart and Settings', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const App());
+    await tester.pumpWidget(
+      ChangeNotifierProvider(create: (_) => CartModel(), child: const App()),
+    );
     await tester.pumpAndSettle();
 
     // Open drawer

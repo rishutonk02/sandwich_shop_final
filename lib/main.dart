@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:sandwich_shop/models/cart_model.dart';
+import 'package:sandwich_shop/models/theme_model.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/views/cart_screen_page.dart';
@@ -34,7 +37,15 @@ final GoRouter _router = GoRouter(
 );
 
 void main() {
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartModel()),
+        ChangeNotifierProvider(create: (_) => ThemeModel()),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -42,9 +53,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark;
+    try {
+      isDark = Provider.of<ThemeModel>(context).isDark;
+    } catch (_) {
+      // Tests may pump `App` without wrapping providers — fall back to light theme.
+      isDark = false;
+    }
     return MaterialApp.router(
       title: 'Sandwich Shop',
-      theme: AppStyles.theme,
+      theme: isDark ? ThemeData.dark() : AppStyles.theme,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );

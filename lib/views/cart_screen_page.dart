@@ -1,65 +1,19 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
-import 'package:sandwich_shop/services/file_service.dart';
-import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/views/checkout_screen.dart';
 import 'package:sandwich_shop/views/app_drawer.dart';
+import 'package:sandwich_shop/models/cart_model.dart';
 
-class CartScreen extends StatefulWidget {
-  final FileService? fileService;
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
 
-  const CartScreen({super.key, this.fileService});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  late final FileService _fs;
-  Cart _cart = Cart();
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _fs = widget.fileService ?? FileService();
-    _load();
-  }
-
-  Future<void> _load() async {
-    String? content;
-    try {
-      content = await _fs
-          .read('cart.json')
-          .timeout(const Duration(milliseconds: 500));
-    } catch (e) {
-      content = null;
-    }
-
-    if (content != null) {
-      try {
-        final decoded = jsonDecode(content) as Map<String, dynamic>;
-        setState(() {
-          _cart = Cart.fromJson(decoded);
-          _loading = false;
-        });
-        return;
-      } catch (_) {
-        // fallthrough to empty cart
-      }
-    }
-
-    setState(() {
-      _cart = Cart();
-      _loading = false;
-    });
-  }
-
-  Future<void> _navigateToCheckout() async {
-    if (_cart.items.isEmpty) {
+  Future<void> _navigateToCheckout(
+    BuildContext context,
+    CartModel cartModel,
+  ) async {
+    if (cartModel.items.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Your cart is empty')));
@@ -68,11 +22,12 @@ class _CartScreenState extends State<CartScreen> {
 
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => CheckoutScreen(cart: _cart)),
+      MaterialPageRoute(builder: (_) => CheckoutScreen(cart: cartModel.cart)),
     );
 
-    if (result != null && mounted) {
-      setState(() => _cart = Cart());
+    if (result != null && context.mounted) {
+      // clear cart after successful checkout
+      cartModel.clear();
       final orderId = result['orderId'] as String? ?? 'UNKNOWN';
       final estimatedTime = result['estimatedTime'] as String? ?? '';
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,89 +42,73 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartModel = Provider.of<CartModel>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Cart', style: AppStyles.heading1)),
       drawer: const AppDrawer(),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Items: ${_cart.totalItems}',
-                    style: AppStyles.normalText,
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _cart.items.length,
-                      itemBuilder: (context, index) {
-                        final it = _cart.items[index];
-                        return ListTile(
-                          title: Text(
-                            '${it.quantity}x ${it.sandwich.name}',
-                            style: AppStyles.normalText,
-                          ),
-                          subtitle: Text(
-                            '${it.sandwich.breadType.name} • ${it.sandwich.isFootlong ? 'Footlong' : 'Six-inch'}',
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.remove_circle_outline,
-                                  color: it.quantity > 0
-                                      ? Colors.black
-                                      : Colors.grey,
-                                ),
-                                onPressed: it.quantity > 0
-                                    ? () {
-                                        setState(() {
-                                          _cart.decrease(
-                                            it.sandwich,
-                                            quantity: 1,
-                                          );
-                                        });
-                                      }
-                                    : null,
-                              ),
-                              Text(
-                                '${it.quantity}',
-                                style: AppStyles.normalText,
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.add_circle_outline,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _cart.add(it.sandwich, quantity: 1);
-                                  });
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                '£${PricingRepository().calculateTotal(quantity: it.quantity, isFootlong: it.sandwich.isFootlong).toStringAsFixed(2)}',
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Items: ${cartModel.totalItems}', style: AppStyles.normalText),
+            const SizedBox(height: 8),
+            Expanded(
+              child: ListView.builder(
+                itemCount: cartModel.items.length,
+                itemBuilder: (context, index) {
+                  final it = cartModel.items[index];
+                  return ListTile(
+                    title: Text(
+                      '${it.quantity}x ${it.sandwich.name}',
+                      style: AppStyles.normalText,
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  ElevatedButton.icon(
-                    onPressed: _navigateToCheckout,
-                    icon: const Icon(Icons.payment),
-                    label: const Text('Checkout'),
-                  ),
-                ],
+                    subtitle: Text(
+                      '${it.sandwich.breadType.name} • ${it.sandwich.isFootlong ? 'Footlong' : 'Six-inch'}',
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.remove_circle_outline,
+                            color: it.quantity > 0 ? Colors.black : Colors.grey,
+                          ),
+                          onPressed: it.quantity > 0
+                              ? () {
+                                  cartModel.decrease(it.sandwich, quantity: 1);
+                                }
+                              : null,
+                        ),
+                        Text('${it.quantity}', style: AppStyles.normalText),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.add_circle_outline,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            cartModel.add(it.sandwich, quantity: 1);
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '£${PricingRepository().calculateTotal(quantity: it.quantity, isFootlong: it.sandwich.isFootlong).toStringAsFixed(2)}',
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => _navigateToCheckout(context, cartModel),
+              icon: const Icon(Icons.payment),
+              label: const Text('Checkout'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

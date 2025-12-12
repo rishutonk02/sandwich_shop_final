@@ -5,6 +5,8 @@ import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/view_models/order_view_model.dart';
 import 'package:sandwich_shop/services/file_service.dart';
 import 'package:sandwich_shop/views/cart_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:sandwich_shop/models/cart_model.dart';
 import 'package:sandwich_shop/views/app_drawer.dart';
 import 'package:sandwich_shop/views/profile_screen.dart';
 
@@ -57,9 +59,17 @@ class _OrderScreenState extends State<OrderScreen> {
         breadType: _selectedBreadType,
       );
 
-      setState(() {
-        _vm.addToCart(sandwich, quantity: _quantity);
-      });
+      // Persist via view model
+      _vm.addToCart(sandwich, quantity: _quantity);
+      // Update shared in-memory cart so UI updates immediately
+      try {
+        Provider.of<CartModel>(
+          context,
+          listen: false,
+        ).add(sandwich, quantity: _quantity);
+      } catch (_) {}
+
+      setState(() {});
 
       String sizeText = _isFootlong ? 'footlong' : 'six-inch';
       String confirmationMessage =
@@ -71,9 +81,34 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
+  void _addToCartWithFeedback() {
+    _addToCart();
+    // Persist cart so CartScreen can load the updated contents.
+    _vm
+        .saveCart('cart.json')
+        .then((_) {
+          debugPrint('OrderScreen: cart saved');
+        })
+        .catchError((e) {
+          debugPrint('OrderScreen: failed to save cart: $e');
+        });
+
+    if (_confirmationMessage != null) {
+      debugPrint('OrderScreen: $_confirmationMessage');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_confirmationMessage!),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      debugPrint('OrderScreen: addToCart called but no confirmation message');
+    }
+  }
+
   VoidCallback? _getAddToCartCallback() {
     if (_quantity > 0) {
-      return _addToCart;
+      return _addToCartWithFeedback;
     }
     return null;
   }
