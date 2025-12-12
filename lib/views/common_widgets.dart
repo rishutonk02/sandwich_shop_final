@@ -14,28 +14,16 @@ class ShopAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: Builder(
-        builder: (context) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                tooltip: 'Open navigation menu',
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
-              SizedBox(
-                height: 40,
-                child: Image.asset('assets/images/logo.png'),
-              ),
-            ],
-          ),
+        builder: (context) => IconButton(
+          tooltip: 'Open navigation menu',
+          icon: const Icon(Icons.menu),
+          onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),
       title: Text(title, style: heading1),
       actions: [
         Consumer<CartModel>(
-          builder: (_, cart, __) => Padding(
+          builder: (context, cart, child) => Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,

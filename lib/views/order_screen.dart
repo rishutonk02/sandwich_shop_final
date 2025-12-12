@@ -6,6 +6,7 @@ import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/views/cart_screen.dart';
 import 'package:sandwich_shop/views/profile_screen.dart';
 import 'package:sandwich_shop/views/settings_screen.dart';
+import 'package:sandwich_shop/views/app_drawer.dart';
 // Order history screen not implemented in this worksheet. Navigate shows a message.
 import 'package:sandwich_shop/views/common_widgets.dart';
 
@@ -23,7 +24,6 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
   int _quantity = 1;
-  String? _confirmationMessage;
 
   @override
   void initState() {
@@ -88,9 +88,6 @@ class _OrderScreenState extends State<OrderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
       );
-      setState(() {
-        _confirmationMessage = msg;
-      });
     }
   }
 
@@ -147,7 +144,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: Image.asset(
                   _getCurrentImagePath(),
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
+                  errorBuilder: (context, error, stackTrace) =>
                       Center(child: Text('Image not found', style: normalText)),
                 ),
               ),
@@ -217,16 +214,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 backgroundColor: Colors.green,
               ),
               const SizedBox(height: 20),
-              if (_confirmationMessage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    _confirmationMessage!,
-                    key: const Key('confirmation_text'),
-                    style: normalText,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              // Confirmation message removed: feedback is shown via SnackBar.
               StyledButton(
                 onPressed: _navigateToCartView,
                 icon: Icons.shopping_cart,
@@ -256,10 +244,20 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               const SizedBox(height: 20),
               Consumer<CartModel>(
-                builder: (_, cart, __) => Text(
-                  'Cart: ${cart.totalItems} items - £${cart.totalPrice.toStringAsFixed(2)}',
-                  style: normalText,
-                  textAlign: TextAlign.center,
+                builder: (context, cart, child) => Column(
+                  children: [
+                    Text(
+                      'Items: ${cart.totalItems}',
+                      key: const Key('cart_items'),
+                      style: normalText,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Total: £${cart.totalPrice.toStringAsFixed(2)}',
+                      key: const Key('cart_total'),
+                      style: normalText,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
