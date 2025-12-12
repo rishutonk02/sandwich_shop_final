@@ -45,5 +45,32 @@ void main() {
 
     // Settings screen shows the dark mode label
     expect(find.text('Enable Dark Mode'), findsOneWidget);
+
+    // Open drawer and tap Profile
+    await tester.tap(menu);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    final Finder profileTile = find.text('Profile');
+    expect(profileTile, findsWidgets);
+    await tester.tap(profileTile.first);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    expect(find.text('Profile'), findsOneWidget);
+
+    // Open drawer and tap About
+    await tester.tap(menu);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    final Finder aboutTile = find.text('About');
+    expect(aboutTile, findsWidgets);
+    await tester.tap(aboutTile.first);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    expect(find.textContaining('Welcome to Sandwich Shop'), findsOneWidget);
+
+    // Finally, open drawer and tap Home to return to OrderScreen
+    await tester.tap(menu);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    final Finder homeTile = find.text('Home');
+    expect(homeTile, findsWidgets);
+    await tester.tap(homeTile.first);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+    expect(find.text('Sandwich Counter'), findsOneWidget);
   });
 }

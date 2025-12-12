@@ -33,8 +33,7 @@ void main() {
     // Default sandwich size in the UI is footlong => £11.00
     expect(totalText, 'Total: £11.00');
 
-    // Confirmation message displayed
-    final confirmation = find.byKey(const Key('confirmation_text'));
-    expect(confirmation, findsOneWidget);
+    // A SnackBar confirmation should be shown
+    expect(find.byType(SnackBar), findsOneWidget);
   });
 }
