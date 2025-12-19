@@ -10,6 +10,7 @@ import 'package:sandwich_shop/views/app_drawer.dart';
 // Order history screen not implemented in this worksheet. Navigate shows a message.
 import 'package:sandwich_shop/views/common_widgets.dart';
 import 'package:sandwich_shop/firebase_example.dart';
+import 'package:sandwich_shop/views/firebase_orders_screen.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key, required this.maxQuantity});
@@ -272,6 +273,20 @@ class _OrderScreenState extends State<OrderScreen> {
                 icon: Icons.cloud,
                 label: 'Firebase Demo',
                 backgroundColor: Colors.teal,
+              ),
+              const SizedBox(height: 20),
+              StyledButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const FirebaseOrdersScreen(),
+                    ),
+                  );
+                },
+                icon: Icons.list,
+                label: 'Show Orders',
+                backgroundColor: Colors.orange,
               ),
               const SizedBox(height: 20),
               Consumer<CartModel>(
