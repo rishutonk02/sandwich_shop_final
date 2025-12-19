@@ -10,6 +10,7 @@ import 'package:sandwich_shop/views/app_drawer.dart';
 // Order history screen not implemented in this worksheet. Navigate shows a message.
 import 'package:sandwich_shop/views/common_widgets.dart';
 import 'package:sandwich_shop/firebase_example.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sandwich_shop/views/firebase_orders_screen.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -172,6 +173,35 @@ class _OrderScreenState extends State<OrderScreen> {
                   errorBuilder: (context, error, stackTrace) =>
                       Center(child: Text('Image not found', style: normalText)),
                 ),
+              ),
+              const SizedBox(height: 12),
+              // Firebase sign-in status and sign-out control
+              Builder(
+                builder: (ctx) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'User: ${user?.uid ?? 'Not signed in'}',
+                        style: normalText,
+                      ),
+                      const SizedBox(width: 12),
+                      if (user != null)
+                        ElevatedButton(
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(ctx).showSnackBar(
+                              const SnackBar(content: Text('Signed out')),
+                            );
+                            setState(() {});
+                          },
+                          child: const Text('Sign Out'),
+                        ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 20),
               DropdownMenu<SandwichType>(
