@@ -9,6 +9,7 @@ import 'package:sandwich_shop/views/settings_screen.dart';
 import 'package:sandwich_shop/views/app_drawer.dart';
 // Order history screen not implemented in this worksheet. Navigate shows a message.
 import 'package:sandwich_shop/views/common_widgets.dart';
+import 'package:sandwich_shop/firebase_example.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key, required this.maxQuantity});
@@ -70,6 +71,29 @@ class _OrderScreenState extends State<OrderScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Order history not implemented yet')),
     );
+  }
+
+  Future<void> _runFirebaseDemo() async {
+    final example = FirebaseExample();
+    try {
+      final cred = await example.signInAnonymously();
+      await example.addOrder({
+        'item': 'Demo Sandwich',
+        'created_at': DateTime.now().toIso8601String(),
+        'uid': cred.user?.uid ?? 'unknown',
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Firebase demo: signed in & order created'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Firebase demo failed: $e')));
+    }
   }
 
   void _addToCart() {
@@ -241,6 +265,13 @@ class _OrderScreenState extends State<OrderScreen> {
                 icon: Icons.history,
                 label: 'Order History',
                 backgroundColor: Colors.indigo,
+              ),
+              const SizedBox(height: 20),
+              StyledButton(
+                onPressed: _runFirebaseDemo,
+                icon: Icons.cloud,
+                label: 'Firebase Demo',
+                backgroundColor: Colors.teal,
               ),
               const SizedBox(height: 20),
               Consumer<CartModel>(
